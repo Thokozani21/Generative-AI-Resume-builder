@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI Fire4s CV/Resume Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gray-100 p-4 min-h-screen flex items-center justify-center">
+    <div class="container bg-white p-6 md:p-8 rounded-lg shadow-xl max-w-4xl w-full my-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">AI Fire4s CV/Resume Builder</h1>
+
+        <nav class="main-nav bg-gray-800 text-white p-3 rounded-md mb-6 shadow-md">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <span class="text-lg font-bold">AI Resume Builder</span>
+                    <ul class="hidden md:flex space-x-4">
+                        <li><button class="nav-link" data-action="showSection" data-target-section="buildResumeSection">Build Resume</button></li>
+                        <li><button class="nav-link" data-action="showSection" data-target-section="matchJobDescriptionSection">Match Job Description</button></li>
+                        <li class="relative group">
+                            <button class="nav-button hover:text-blue-300">Templates <i class="fas fa-caret-down ml-1"></i></button>
+                            <ul class="dropdown-menu absolute hidden group-hover:block bg-gray-700 text-white rounded-md shadow-lg py-2 z-10 min-w-[150px]">
+                                <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="modern">Modern</button></li>
+                                <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="creative">Creative</button></li>
+                                <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="professional">Professional</button></li>
+                                <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="simple">Simple</button></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:hidden">
+                    <button id="hamburgerButton" class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+                <ul class="hidden md:flex space-x-4">
+                    <li class="relative group">
+                        <button class="nav-button hover:text-blue-300">Edit <i class="fas fa-caret-down ml-1"></i></button>
+                        <ul class="dropdown-menu absolute hidden group-hover:block bg-gray-700 text-white rounded-md shadow-lg py-2 z-10 min-w-[150px]">
+                            <li><button class="dropdown-item" data-action="showMessage" data-message="Undo function not yet implemented."><i class="fas fa-undo mr-2"></i>Undo</button></li>
+                            <li><button class="dropdown-item" data-action="showMessage" data-message="Redo function not yet implemented."><i class="fas fa-redo mr-2"></i>Redo</button></li>
+                            <li class="border-t border-gray-600 my-1"></li>
+                            <li><button class="dropdown-item" data-action="clearFields"><i class="fas fa-eraser mr-2"></i>Clear All Fields</button></li>
+                            <li><button class="dropdown-item" data-action="generateAISummary"><i class="fas fa-robot mr-2"></i>Generate AI Summary</button></li>
+                            <li class="border-t border-gray-600 my-1"></li>
+                            <li><button class="dropdown-item" data-action="togglePreview"><i class="fas fa-eye mr-2"></i>Toggle Preview</button></li>
+                            <li><button class="dropdown-item" data-action="toggleDarkMode"><i class="fas fa-moon mr-2" id="darkModeIcon"></i>Toggle Dark Mode</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <ul id="mobileMenu" class="mobile-menu-dropdown mt-2 hidden md:hidden bg-gray-700 text-white rounded-md shadow-lg py-2">
+                <li><button class="dropdown-item" data-action="showSection" data-target-section="buildResumeSection">Build Resume</button></li>
+                <li><button class="dropdown-item" data-action="showSection" data-target-section="matchJobDescriptionSection">Match Job Description</button></li>
+                <li class="relative">
+                    <button class="dropdown-item w-full text-left flex items-center justify-between" data-action="toggleMobileSubMenu" data-target="templatesSubMenu">Templates <i class="fas fa-caret-right ml-1"></i></button>
+                    <ul id="templatesSubMenu" class="dropdown-menu-sub hidden bg-gray-600 text-white rounded-md shadow-lg py-1 ml-4">
+                        <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="modern">Modern</button></li>
+                        <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="creative">Creative</button></li>
+                        <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="professional">Professional</button></li>
+                        <li><button class="dropdown-item" data-action="loadTemplate" data-template-type="simple">Simple</button></li>
+                    </ul>
+                </li>
+                <li class="border-t border-gray-600 my-1"></li>
+                <li class="relative">
+                    <button class="dropdown-item w-full text-left flex items-center justify-between" data-action="toggleMobileSubMenu" data-target="editSubMenu">Edit <i class="fas fa-caret-right ml-1"></i></button>
+                    <ul id="editSubMenu" class="dropdown-menu-sub hidden bg-gray-600 text-white rounded-md shadow-lg py-1 ml-4">
+                        <li><button class="dropdown-item" data-action="showMessage" data-message="Undo function not yet implemented."><i class="fas fa-undo mr-2"></i>Undo</button></li>
+                        <li><button class="dropdown-item" data-action="showMessage" data-message="Redo function not yet implemented."><i class="fas fa-redo mr-2"></i>Redo</button></li>
+                        <li class="border-t border-gray-500 my-1"></li>
+                        <li><button class="dropdown-item" data-action="clearFields"><i class="fas fa-eraser mr-2"></i>Clear All Fields</button></li>
+                        <li><button class="dropdown-item" data-action="generateAISummary"><i class="fas fa-robot mr-2"></i>Generate AI Summary</button></li>
+                        <li class="border-t border-gray-500 my-1"></li>
+                        <li><button class="dropdown-item" data-action="togglePreview"><i class="fas fa-eye mr-2"></i>Toggle Preview</button></li>
+                        <li><button class="dropdown-item" data-action="toggleDarkMode"><i class="fas fa-moon mr-2" id="darkModeIconMobile"></i>Toggle Dark Mode</button></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="buildResumeSection">
+            <form id="resumeForm" class="space-y-6">
+                <h2 class="text-2xl font-semibold text-gray-700 mt-8 mb-4 text-center">Personal Information</h2>
+                <div class="form-group grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name:</label>
+                        <input type="text" id="name" placeholder="Full Name:" required class="input-field" />
+                    </div>
+                    <div>
+                        <label for="idno" class="block text-sm font-medium text-gray-700 mb-1">ID Number:</label>
+                        <input type="text" id="idno" placeholder="ID Number:" required class="input-field" />
+                    </div>
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Physical Address:</label>
+                        <input type="text" id="address" placeholder="Physical Address:" required class="input-field" />
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address:</label>
+                        <input type="email" id="email" placeholder="Email Address:" required class="input-field" />
+                    </div>
+                    <div>
+                        <label for="contact" class="block text-sm font-medium text-gray-700 mb-1">Phone Number:</label>
+                        <input type="tel" id="contact" placeholder="Phone Number:" required class="input-field" />
+                    </div>
+                    <div>
+                        <label for="linkedin" class="block text-sm font-medium text-gray-700 mb-1">LinkedIn Profile/Link:</label>
+                        <input type="text" id="linkedin" placeholder="LinkedIn Profile/Link" class="input-field" />
+                    </div>
+                    <div>
+                        <label for="github" class="block text-sm font-medium text-gray-700 mb-1">GitHub Profile/Link:</label>
+                        <input type="text" id="github" placeholder="GitHub Profile/Link" class="input-field" />
+                    </div>
+                    <div>
+                        <label for="portfolio" class="block text-sm font-medium text-gray-700 mb-1">Personal Portfolio Website:</label>
+                        <input type="text" id="portfolio" placeholder="Personal Portfolio Website" class="input-field" />
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold text-gray-700 mt-8 mb-4 text-center">About Yourself</h2>
+                <div class="form-group grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-full">
+                        <label for="skills" class="block text-sm font-medium text-gray-700 mb-1">Technical & Soft Skills (comma-separated):</label>
+                        <textarea id="skills" placeholder="Technical & Soft Skills (comma-separated)" required class="textarea-field w-full"></textarea>
+                    </div>
+                    <div class="relative col-span-full">
+                        <label for="about" class="block text-sm font-medium text-gray-700 mb-1">Professional Summary:</label>
+                        <textarea id="about" placeholder="Professional Summary" required class="textarea-field w-full"></textarea>
+                    </div>
+                    <div class="col-span-full">
+                        <label for="highlights" class="block text-sm font-medium text-gray-700 mb-1">Key Accomplishments/Highlights:</label>
+                        <textarea id="highlights" placeholder="Key Accomplishments/Highlights" class="textarea-field w-full"></textarea>
+                    </div>
+                    <div>
+                        <label for="languages" class="block text-sm font-medium text-gray-700 mb-1">Languages Spoken:</label>
+                        <textarea id="languages" placeholder="Languages Spoken" class="textarea-field"></textarea>
+                    </div>
+                    <div>
+                        <label for="interests" class="block text-sm font-medium text-gray-700 mb-1">Interests or Hobbies:</label>
+                        <textarea id="interests" placeholder="Interests or Hobbies" class="textarea-field"></textarea>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold text-gray-700 mt-8 mb-4 text-center">Education & Training</h2>
+                <div class="form-group grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-full">
+                        <label for="background" class="block text-sm font-medium text-gray-700 mb-1">Academic Background:</label>
+                        <textarea id="background" placeholder="Academic Background" required class="textarea-field w-full"></textarea>
+                    </div>
+                    <div class="col-span-full">
+                        <label for="experience" class="block text-sm font-medium text-gray-700 mb-1">Work Experience:</label>
+                        <textarea id="experience" placeholder="Work Experience" required class="textarea-field w-full"></textarea>
+                    </div>
+                    <div>
+                        <label for="qualification" class="block text-sm font-medium text-gray-700 mb-1">Degrees & Qualifications:</label>
+                        <textarea id="qualification" placeholder="Degrees & Qualifications" required class="textarea-field"></textarea>
+                    </div>
+                    <div>
+                        <label for="certifications" class="block text-sm font-medium text-gray-700 mb-1">Certifications (e.g., AWS, TensorFlow, etc.):</label>
+                        <textarea id="certifications" placeholder="Certifications (e.g., AWS, TensorFlow, etc.)" class="textarea-field"></textarea>
+                    </div>
+                    <div>
+                        <label for="courses" class="block text-sm font-medium text-gray-700 mb-1">Relevant Online Courses (e.g., Coursera, Udemy):</label>
+                        <textarea id="courses" placeholder="Relevant Online Courses (e.g., Coursera, Udemy)" class="textarea-field"></textarea>
+                    </div>
+                </div>
+
+                <div class="button-group flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                    <button type="button" id="generatePreviewBtn" class="action-button bg-gray-800 hover:bg-gray-700">
+                        <i class="fas fa-file-alt mr-2"></i>Generate Preview
+                    </button>
+                    <button type="button" id="exportPdfBtn" class="action-button bg-red-600 hover:bg-red-700">
+                        <i class="fas fa-file-pdf mr-2"></i>Export PDF
+                    </button>
+                    <button type="button" id="exportDocxBtn" class="action-button bg-blue-600 hover:bg-blue-700">
+                        <i class="fas fa-file-word mr-2"></i>Export DOCX
+                    </button>
+                    <button type="button" id="exportHtmlBtn" class="action-button bg-green-600 hover:bg-green-700">
+                        <i class="fas fa-file-code mr-2"></i>Export HTML
+                    </button>
+                    <button type="button" id="clearAllFieldsBtn" class="action-button bg-orange-600 hover:bg-orange-700">
+                        <i class="fas fa-eraser mr-2"></i>Clear All Fields
+                    </button>
+                    <button type="button" id="toggleDarkModeBtn" class="action-button bg-indigo-600 hover:bg-indigo-700">
+                        <i class="fas fa-moon mr-2" id="darkModeIcon"></i>Toggle Dark Mode
+                    </button>
+                    <button type="button" id="togglePreviewBtn" class="action-button bg-teal-600 hover:bg-teal-700">
+                        <i class="fas fa-eye mr-2"></i>Toggle Preview
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="matchJobDescriptionSection" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-700 mt-8 mb-4 text-center">Match Job Description</h2>
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="md:w-1/2 p-4 border border-gray-200 rounded-lg shadow-sm">
+                    <label for="jobDescription" class="block text-sm font-medium text-gray-700 mb-2">Job Description:</label>
+                    <textarea id="jobDescription" placeholder="Paste the job description here..." class="textarea-field w-full h-48"></textarea>
+                    <button id="matchJobBtn" class="action-button bg-blue-700 hover:bg-blue-800 w-full mt-4">Match</button>
+                </div>
+                <div class="md:w-1/2 p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">Matching Results</h3>
+                    <div class="text-center mb-6">
+                        <p class="text-gray-600 text-lg">Matching</p>
+                        <p id="matchingPercentage" class="text-5xl font-bold text-green-600">--%</p>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Top Skills Matched:</h4>
+                        <ul id="topSkillsMatched" class="list-disc list-inside ml-4 text-gray-700">
+                            <li class="text-gray-500">No skills matched yet.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Resume Sections:</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-sm text-gray-600">Skills</p>
+                                <div class="progress-bar-container bg-gray-200 rounded-full h-3">
+                                    <div id="skillsProgressBar" class="progress-bar-fill bg-blue-500 h-full rounded-full" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Experience</p>
+                                <div class="progress-bar-container bg-gray-200 rounded-full h-3">
+                                    <div id="experienceProgressBar" class="progress-bar-fill bg-yellow-500 h-full rounded-full" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Education</p>
+                                <div class="progress-bar-container bg-gray-200 rounded-full h-3">
+                                    <div id="educationProgressBar" class="progress-bar-fill bg-red-500 h-full rounded-full" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="result mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner print-area" id="result">
+            <p class="text-gray-500 text-center">Your generated resume will appear here.</p>
+        </div>
+    </div>
+
+    <div id="messageBox" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <p id="messageText" class="text-gray-800 text-lg mb-4"></p>
+            <button id="messageBoxOkBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200">OK</button>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="flex items-center text-white text-xl">
+            <i class="fas fa-spinner fa-spin mr-3"></i> Loading...
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
